@@ -10,7 +10,21 @@ public class Project : MonoBehaviour {
 	private Transform _transform;
 	private int[][] _adjacencyDictionary;
 
+	private EdgeCollider2D[] _colliders;
+	private Vector2[][] _colliderPoints;
+	int _pointsPerCollider = 105;
+
 	void Awake () {
+
+		_colliders = new EdgeCollider2D[_planes.Length];
+		_colliderPoints = new Vector2[_planes.Length][];
+		for (int i = 0; i < _planes.Length; i++) {
+			GameObject colliderObject = new GameObject();
+			_colliders[i] = colliderObject.AddComponent<EdgeCollider2D>();
+			_colliderPoints[i] = new Vector2[_pointsPerCollider];
+			_colliders[i].points = _colliderPoints[i];
+		}
+
 		_mesh = GetComponent<MeshFilter>().mesh;
 		_transform = GetComponent<Transform>();
 		CacheAdjacencies();
@@ -121,6 +135,73 @@ public class Project : MonoBehaviour {
 		return Mathf.Atan2(det, dot);  // atan2(y, x) or atan2(sin, cos)
 	}
 
+
+	// void FixedUpdate () {
+	// 	int[] triangles = _mesh.triangles;
+	// 	int triangleCount = triangles.Length;
+	// 	Vector3[] vertices = _mesh.vertices;
+	// 	int vertexCount = vertices.Length;
+
+	// 	Vector3[] projectedVertices3d = new Vector3[vertexCount];
+	// 	int lowestVertIndex = -1;
+
+	// 	float bestDotProd = Mathf.Infinity;
+	// 	for (int planeIndex = 0; planeIndex < _planes.Length; planeIndex++) {
+	// 		Plane plane = _planes[planeIndex];
+	// 		for (int unprojectedVertIndex = 0; unprojectedVertIndex < vertexCount; unprojectedVertIndex++) {
+	// 			Vector3 projected3d = ProjectVertIndexToPlane(unprojectedVertIndex, plane);
+	// 			projectedVertices3d[unprojectedVertIndex] = projected3d;
+
+	// 			float currDotProd = Vector3.Dot(plane.Up, projected3d);
+	// 			if (currDotProd < bestDotProd) {
+	// 				lowestVertIndex = unprojectedVertIndex;
+	// 				bestDotProd = currDotProd;
+	// 			}
+	// 		}
+
+
+	// 		List<int> concaveHullIndices = new List<int>();
+	// 		concaveHullIndices.Add(lowestVertIndex); // We know the highest vertex must be part of the convex hull
+	// 		Vector3 angleTestVertex = projectedVertices3d[lowestVertIndex] - plane.Right;
+	// 		int __breakOut__ = 0;
+	// 		do {
+	// 			float largestAngle = 0.0f;
+	// 			int currentWrapIndex = concaveHullIndices[concaveHullIndices.Count - 1];
+	// 			int[] possibleVertices = _adjacencyDictionary[currentWrapIndex];
+	// 			concaveHullIndices.Add(-1); // Add a placeholder to be replaced with next index
+	// 			Vector2 currentWrapVert = TwoDimCoordsOnPlane(projectedVertices3d[currentWrapIndex], plane);
+	// 			Vector2 v2 = TwoDimCoordsOnPlane(angleTestVertex, plane) - currentWrapVert;
+	// 			for (int connectionIndex = 0; connectionIndex < possibleVertices.Length; connectionIndex++) {
+	// 				int testIndex = possibleVertices[connectionIndex];
+	// 				Vector2 v1 = TwoDimCoordsOnPlane(projectedVertices3d[testIndex], plane) - currentWrapVert;
+	// 				float currentAngle = AngleBetween(v1, v2);
+	// 				if (largestAngle < currentAngle) {
+	// 					largestAngle = currentAngle;
+	// 					concaveHullIndices[concaveHullIndices.Count - 1] = testIndex; // replace placeholder
+	// 				}
+	// 			}
+	// 			angleTestVertex = projectedVertices3d[concaveHullIndices[concaveHullIndices.Count - 2]];
+	// 			__breakOut__++; // Prevent infinite loops
+	// 		} while (__breakOut__ < 100 && lowestVertIndex != concaveHullIndices[concaveHullIndices.Count - 1]);
+	// 		if (__breakOut__ > 99) {
+	// 			// Debug.LogError(__breakOut__);
+	// 		}
+
+	// 		int i;
+	// 		// Debug.Log(concaveHullIndices.Count);
+	// 		for (i = 0; i < concaveHullIndices.Count; i++) {
+	// 			Vector2 pt = TwoDimCoordsOnPlane(projectedVertices3d[concaveHullIndices[i]], plane);
+	// 			// Debug.Log(_colliderPoints[planeIndex].Length);
+	// 			_colliderPoints[planeIndex][i] = pt;
+	// 			// Gizmos.DrawLine(projectedVertices3d[concaveHullIndices[i-1]], projectedVertices3d[concaveHullIndices[i]]);
+	// 		}
+	// 		for (i = concaveHullIndices.Count; i < _pointsPerCollider; i++) {
+	// 			_colliderPoints[planeIndex][i] = _colliderPoints[planeIndex][0];
+	// 		}
+	// 		_colliders[planeIndex].points = _colliderPoints[planeIndex];
+	// 	}
+	// }
+
 	void OnDrawGizmos () {
 		if (_mesh == null) return;
 		int[] triangles = _mesh.triangles;
@@ -129,7 +210,7 @@ public class Project : MonoBehaviour {
 		int vertexCount = vertices.Length;
 
 		Vector3[] projectedVertices3d = new Vector3[vertexCount];
-		int highestVertIndex = -1;
+		int lowestVertIndex = -1;
 
 		float bestDotProd = Mathf.Infinity;
 		for (int planeIndex = 0; planeIndex < _planes.Length; planeIndex++) {
@@ -140,15 +221,15 @@ public class Project : MonoBehaviour {
 
 				float currDotProd = Vector3.Dot(plane.Up, projected3d);
 				if (currDotProd < bestDotProd) {
-					highestVertIndex = unprojectedVertIndex;
+					lowestVertIndex = unprojectedVertIndex;
 					bestDotProd = currDotProd;
 				}
 			}
 
 
 			List<int> concaveHullIndices = new List<int>();
-			concaveHullIndices.Add(highestVertIndex); // We know the highest vertex must be part of the convex hull
-			Vector3 angleTestVertex = projectedVertices3d[highestVertIndex] - plane.Right;
+			concaveHullIndices.Add(lowestVertIndex); // We know the highest vertex must be part of the convex hull
+			Vector3 angleTestVertex = projectedVertices3d[lowestVertIndex] - plane.Right;
 			int __breakOut__ = 0;
 			do {
 				float largestAngle = 0.0f;
@@ -168,7 +249,7 @@ public class Project : MonoBehaviour {
 				}
 				angleTestVertex = projectedVertices3d[concaveHullIndices[concaveHullIndices.Count - 2]];
 				__breakOut__++; // Prevent infinite loops
-			} while (__breakOut__ < 1000 && highestVertIndex != concaveHullIndices[concaveHullIndices.Count - 1]);
+			} while (__breakOut__ < 1000 && lowestVertIndex != concaveHullIndices[concaveHullIndices.Count - 1]);
 			// Debug.Log(__breakOut__);
 
 			Gizmos.color = Color.white;

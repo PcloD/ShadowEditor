@@ -37,7 +37,7 @@ public class Project2 : MonoBehaviour {
 				+ "," + worldPos.y
 				+ "," + worldPos.z + "\n");
 		}
-		Debug.Log(__res);
+		// Debug.Log(__res);
 
 		// string __res = "{\n";
 		for (int i = 0; i < _adjacencyDictionary.Length; i++) {
@@ -48,7 +48,7 @@ public class Project2 : MonoBehaviour {
 			__res += ((i < _adjacencyDictionary.Length-1)?"],\n":"]\n");
 		}
 		__res += "}";
-		Debug.Log(__res);
+		// Debug.Log(__res);
 
 		// __res = "";
 		// for (int i = 0; i < _adjacencyDictionary.Length; i++) {
@@ -174,7 +174,7 @@ public class Project2 : MonoBehaviour {
 
 	void OnDrawGizmos () {
 		if (_mesh == null) return;
-		float precision = 10f;
+		float precision = 10000f;
 		int[] triangles = _mesh.triangles;
 		int triangleCount = triangles.Length;
 		Vector3[] vertices = _mesh.vertices;
@@ -195,70 +195,83 @@ public class Project2 : MonoBehaviour {
 				projectedVertices3d[unprojectedVertIndex] = projected3d;
 			}
 
-			// string __res = "";
+			string __res = "";
 
 			// for (int i = 0; i < 1;i++){//triangleCount/3; i++) {
 			for (int i = 0; i < triangleCount/3; i++) {
-				// Vector2 v1 = TwoDimCoordsOnPlane(projectedVertices3d[triangles[i*3]], plane);
-				// Vector2 v2 = TwoDimCoordsOnPlane(projectedVertices3d[triangles[i*3+1]], plane);
-				// Vector2 v3 = TwoDimCoordsOnPlane(projectedVertices3d[triangles[i*3+2]], plane);
+				Vector2 v1 = TwoDimCoordsOnPlane(projectedVertices3d[triangles[i*3]], plane);
+				Vector2 v2 = TwoDimCoordsOnPlane(projectedVertices3d[triangles[i*3+1]], plane);
+				Vector2 v3 = TwoDimCoordsOnPlane(projectedVertices3d[triangles[i*3+2]], plane);
+
+				if (Vector3.Dot(Vector3.Cross((Vector3)(v1 - v2), (Vector3)(v1 - v3)), plane.Normal) > 0f) {
+					Vector2 temp = v2;
+					v2 = v3;
+					v3 = v2;
+				}
+
 				// poly.Add(IntPointFromVector(v1, precision));
 				// poly.Add(IntPointFromVector(v2, precision));
 				// poly.Add(IntPointFromVector(v3, precision));
 
-				// __res += "["+IntPointFromVector(v1, precision).X +","+IntPointFromVector(v1, precision).Y + ", ";
-				// __res += IntPointFromVector(v2, precision).X +","+IntPointFromVector(v2, precision).Y +", ";
-				// __res += IntPointFromVector(v3, precision).X +","+IntPointFromVector(v3, precision).Y +", ";
-				// __res += IntPointFromVector(v1, precision).X +","+IntPointFromVector(v1, precision).Y +"], ";
+				__res += "["+IntPointFromVector(v1, precision).X +","+IntPointFromVector(v1, precision).Y + ", ";
+				__res += IntPointFromVector(v2, precision).X +","+IntPointFromVector(v2, precision).Y +", ";
+				__res += IntPointFromVector(v3, precision).X +","+IntPointFromVector(v3, precision).Y +", ";
+				__res += IntPointFromVector(v1, precision).X +","+IntPointFromVector(v1, precision).Y +"], ";
 
 				// Debug.DrawLine(Vector3FromIntPoint(IntPointFromVector(v1, precision), plane, precision),Vector3FromIntPoint(IntPointFromVector(v2, precision), plane, precision),Color.green);
 				// Debug.DrawLine(Vector3FromIntPoint(IntPointFromVector(v2, precision), plane, precision),Vector3FromIntPoint(IntPointFromVector(v3, precision), plane, precision),Color.green);
 				// Debug.DrawLine(Vector3FromIntPoint(IntPointFromVector(v3, precision), plane, precision),Vector3FromIntPoint(IntPointFromVector(v1, precision), plane, precision),Color.green);
-				subj.Add (PathFromVerts(projectedVertices3d[triangles[i*3]],
-					                    projectedVertices3d[triangles[i*3+1]],
-					                    projectedVertices3d[triangles[i*3+2]],
-					                    plane,
-					                    precision));
+				Path p = new Path(4);
+				// subj.Add (PathFromVerts(projectedVertices3d[triangles[i*3]],
+				// 	                    projectedVertices3d[triangles[i*3+1]],
+				// 	                    projectedVertices3d[triangles[i*3+2]],
+				// 	                    plane,
+				// 	                    precision));
+				p.Add(IntPointFromVector(v1, precision));
+				p.Add(IntPointFromVector(v2, precision));
+				p.Add(IntPointFromVector(v3, precision));
+				p.Add(IntPointFromVector(v1, precision));
+				subj.Add(p);
 				// Debug.DrawLine(Vector3FromIntPoint(subj[i][0], plane, precision),Vector3FromIntPoint(subj[i][1], plane, precision),Color.green);
 				// Debug.DrawLine(Vector3FromIntPoint(subj[i][1], plane, precision),Vector3FromIntPoint(subj[i][2], plane, precision),Color.green);
 				// Debug.DrawLine(Vector3FromIntPoint(subj[i][2], plane, precision),Vector3FromIntPoint(subj[i][0], plane, precision),Color.green);
 			}
-			// Debug.Log(__res);
+			Debug.Log(__res);
 
 			float width = 10f;
 			float height = 10f;
 			Paths clip = new Paths(1);
 			clip.Add(new Path(4));
 			Vector2 c1 = TwoDimCoordsOnPlane(plane.Origin + plane.Up * height/2f - plane.Right * width/2f, plane);
-Vector2 c2 = TwoDimCoordsOnPlane(plane.Origin + plane.Up * height/2f + plane.Right * width/2f, plane);
-Vector2 c3 = TwoDimCoordsOnPlane(plane.Origin - plane.Up * height/2f + plane.Right * width/2f, plane);
-Vector2 c4 = TwoDimCoordsOnPlane(plane.Origin - plane.Up * height/2f - plane.Right * width/2f, plane);
+			Vector2 c2 = TwoDimCoordsOnPlane(plane.Origin + plane.Up * height/2f + plane.Right * width/2f, plane);
+			Vector2 c3 = TwoDimCoordsOnPlane(plane.Origin - plane.Up * height/2f + plane.Right * width/2f, plane);
+			Vector2 c4 = TwoDimCoordsOnPlane(plane.Origin - plane.Up * height/2f - plane.Right * width/2f, plane);
 
-IntPoint cip1 = IntPointFromVector(c1, precision);
-IntPoint cip2 = IntPointFromVector(c2, precision);
-IntPoint cip3 = IntPointFromVector(c3, precision);
-IntPoint cip4 = IntPointFromVector(c4, precision);
+			IntPoint cip1 = IntPointFromVector(c1, precision);
+			IntPoint cip2 = IntPointFromVector(c2, precision);
+			IntPoint cip3 = IntPointFromVector(c3, precision);
+			IntPoint cip4 = IntPointFromVector(c4, precision);
 
 			clip[0].Add(cip1);
 			clip[0].Add(cip2);
 			clip[0].Add(cip3);
 			clip[0].Add(cip4);
 
-Debug.DrawLine(Vector3FromIntPoint(cip1, plane, precision),Vector3FromIntPoint(cip2, plane, precision),Color.blue);
-Debug.DrawLine(Vector3FromIntPoint(cip2, plane, precision),Vector3FromIntPoint(cip3, plane, precision),Color.blue);
-Debug.DrawLine(Vector3FromIntPoint(cip3, plane, precision),Vector3FromIntPoint(cip4, plane, precision),Color.blue);
-Debug.DrawLine(Vector3FromIntPoint(cip4, plane, precision),Vector3FromIntPoint(cip1, plane, precision),Color.blue);
+	Debug.DrawLine(Vector3FromIntPoint(cip1, plane, precision),Vector3FromIntPoint(cip2, plane, precision),Color.blue);
+	Debug.DrawLine(Vector3FromIntPoint(cip2, plane, precision),Vector3FromIntPoint(cip3, plane, precision),Color.blue);
+	Debug.DrawLine(Vector3FromIntPoint(cip3, plane, precision),Vector3FromIntPoint(cip4, plane, precision),Color.blue);
+	Debug.DrawLine(Vector3FromIntPoint(cip4, plane, precision),Vector3FromIntPoint(cip1, plane, precision),Color.blue);
 
-			// Paths solution = new Paths();
+			Paths solution = new Paths();
 
-			Paths solution = Clipper.SimplifyPolygons(subj, PolyFillType.pftNonZero);
+			// Paths solution = Clipper.SimplifyPolygons(subj, PolyFillType.pftNonZero);
 
-			// Clipper c = new Clipper();
-			// c.AddPaths(subj, PolyType.ptSubject, true);
-			// c.AddPaths(clip, PolyType.ptClip, true);
-			// c.Execute(ClipType.ctIntersection, solution,
-	  // 		          subjFillType: PolyFillType.pftNonZero,
-	  // 		          clipFillType: PolyFillType.pftPositive);
+			Clipper c = new Clipper();
+			c.AddPaths(subj, PolyType.ptSubject, true);
+			c.AddPaths(clip, PolyType.ptClip, true);
+			c.Execute(ClipType.ctIntersection, solution,
+	  		          subjFillType: PolyFillType.pftNonZero,
+	  		          clipFillType: PolyFillType.pftNonZero);
 
 			//pftEvenOdd, pftNonZero, pftPositive, pftNegative
 
@@ -270,6 +283,9 @@ Debug.DrawLine(Vector3FromIntPoint(cip4, plane, precision),Vector3FromIntPoint(c
 					concaveHullVerts.Add(Vector3FromIntPoint(solution[i][j], plane, precision));
 				}
 			}
+
+			// concaveHullVerts.Add(Vector3FromIntPoint(solution[0][0], plane, precision));
+
 			// if (cnt > 0) {
 			// 	Debug.Log(cnt);
 			// }

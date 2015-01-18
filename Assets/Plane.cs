@@ -2,7 +2,6 @@
 using System.Collections;
 
 public class Plane : MonoBehaviour {
-
 	public Vector3 Origin {
 		get { return transform.position; }
 	}
@@ -15,5 +14,4 @@ public class Plane : MonoBehaviour {
 	public Vector3 Normal {
 		get { return -transform.up; }
 	}
-
 }
