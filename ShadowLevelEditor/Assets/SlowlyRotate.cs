@@ -6,6 +6,6 @@ public class SlowlyRotate : MonoBehaviour {
 
     void Update() {
   	    rotation += Input.GetAxis("Horizontal");
-        transform.eulerAngles = new Vector3(0, 0, rotation);
+        transform.eulerAngles = new Vector3(transform.eulerAngles.x, rotation, transform.eulerAngles.z);
     }
 }
