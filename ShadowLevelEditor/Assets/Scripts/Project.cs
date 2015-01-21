@@ -21,8 +21,15 @@ public class Project : MonoBehaviour {
 
 	private Mesh _mesh;
 	private Transform _transform;
+	[SerializeField]
+	private Transform _parentTransform;
+	[SerializeField]
+	private Material _shadowMaterial;
+	private Clipper _clipper;
+
 
 	void Awake () {
+		_clipper = new Clipper();
 		_mesh = GetComponent<MeshFilter>().mesh;
 		_transform = GetComponent<Transform>();
 	}
@@ -36,10 +43,11 @@ public class Project : MonoBehaviour {
 		for (int i = 0; i < _planes.Length; i++) {
 			GameObject colliderObject = new GameObject(_planes[i].gameObject.name + " Collider");
 			colliderObject.layer = _planes[i].Layer;
-			colliderObject.transform.parent = _transform;
+			colliderObject.transform.parent = _parentTransform;
 			_colliderTransforms[i] = colliderObject.transform;
 			_colliders[i] = colliderObject.AddComponent<EdgeCollider2D>();
 			_shadowRenderers[i] = colliderObject.AddComponent<ShadowRenderer>();
+			_shadowRenderers[i].SetMaterial(_shadowMaterial);
 			_colliderPoints[i] = new Vector2[_pointsPerCollider];
 			_colliders[i].points = _colliderPoints[i];
 		}
@@ -158,12 +166,14 @@ public class Project : MonoBehaviour {
 
 			Paths solution = new Paths();
 
-			Clipper c = new Clipper();
-			c.AddPaths(subj, PolyType.ptSubject, true);
-			c.AddPaths(clip, PolyType.ptClip, true);
-			c.Execute(ClipType.ctIntersection, solution,
+			_clipper.Clear();
+			_clipper.AddPaths(subj, PolyType.ptSubject, true);
+			_clipper.AddPaths(clip, PolyType.ptClip, true);
+			_clipper.Execute(ClipType.ctIntersection, solution,
 				subjFillType: PolyFillType.pftNonZero,
 				clipFillType: PolyFillType.pftNonZero);
+
+			solution = Clipper.SimplifyPolygons(solution, PolyFillType.pftNonZero);
 
 			//pftEvenOdd, pftNonZero, pftPositive, pftNegative
 
