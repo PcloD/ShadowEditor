@@ -9,6 +9,8 @@ GameObject:
   m_Component:
   - 4: {fileID: 470642}
   - 114: {fileID: 11470642}
+  - 114: {fileID: 11485032}
+  - 114: {fileID: 11485034}
   m_Layer: 0
   m_Name: WorldManager
   m_TagString: Untagged
@@ -39,7 +41,54 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 82b5572f170fb4843829ebadaa13ee5a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _planes: []
+  _planes:
+  - {fileID: 0}
+  - {fileID: 0}
+--- !u!114 &11485032
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 170642}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 261b024edee654e088aa907357755905, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gravity: -25
+  runSpeed: 3.79999995
+  groundDamping: 20
+  inAirDamping: 5
+  jumpHeight: 1.64999998
+  _playerXY:
+    spriteTransform: {fileID: 0}
+    animator: {fileID: 0}
+    controller: {fileID: 0}
+    velocity: {x: 0, y: 0, z: 0}
+  _playerZY:
+    spriteTransform: {fileID: 0}
+    animator: {fileID: 0}
+    controller: {fileID: 0}
+    velocity: {x: 0, y: 0, z: 0}
+--- !u!114 &11485034
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 170642}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ed9dd22c1c5e47c48a9fe6d2dc82329, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _selectedObject: {fileID: 0}
+  _precision: .5
+  _cameras:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  _spawnablePrefabs: {fileID: 0}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

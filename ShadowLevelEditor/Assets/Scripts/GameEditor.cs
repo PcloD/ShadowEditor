@@ -1,16 +1,20 @@
 ﻿using UnityEngine;
 using System.Collections;
+using Shadow.Extensions.Interface;
+
 
 public class GameEditor : MonoBehaviour {
 
-	[SerializeField]
-	GameObject _selectedObject;
+	IEditorBlock _selectedEditorBlock;
 	[SerializeField]
 	float _precision = 0.5f;
 	[SerializeField]
 	Camera[] _cameras;
+	[SerializeField]
+	GameObject[] _spawnablePrefabs;
 
 	private bool _isMoving = false;
+	private bool _killObjectOnAbort = false;
 	private Vector2 _mouseDelta;
 
 
@@ -36,7 +40,7 @@ public class GameEditor : MonoBehaviour {
 			_mouseDelta = Vector2.zero;
 			_lastMousePos = Input.mousePosition;
 
-			_sourcePosition = _selectedObject.transform.position;
+			_sourcePosition = _selectedEditorBlock.Position;
 		}
 	}
 
@@ -48,17 +52,37 @@ public class GameEditor : MonoBehaviour {
 			Vector3 relativePoint = _relativeCam.ScreenToViewportPoint(Input.mousePosition);
 			_mouseDelta += (Vector2)(relativePoint - lastRelativePoint);
 
-			// TODO(Julian): Fix this
 			Vector3 p = _relativeCam.ViewportToWorldPoint(_relativeCam.WorldToViewportPoint(_sourcePosition) + (Vector3)_mouseDelta);
-			_selectedObject.transform.position = SnapToRounded(p, _precision);
+			_selectedEditorBlock.Position = SnapToRounded(p, _precision);
 
 			if (Input.GetKeyDown(KeyCode.Mouse0)) {
 				_isMoving = false;
 			}
 
 			if (Input.GetKeyDown(KeyCode.Escape)) {
+				if (_killObjectOnAbort) {
+					Destroy(_selectedEditorBlock.GO);
+					_selectedEditorBlock = null;
+					_killObjectOnAbort = false;
+				} else {
+					_selectedEditorBlock.Position = _sourcePosition;
+				}
 				_isMoving = false;
-				_selectedObject.transform.position = _sourcePosition;
+			}
+
+
+			for (int i = 0; i < _spawnablePrefabs.Length; i++) {
+				if (Input.GetKeyDown(KeyCode.Alpha1 + i)) {
+					var pos = _selectedEditorBlock.Position;
+					var rot = _selectedEditorBlock.Rotation;
+					Destroy(_selectedEditorBlock.GO);
+					_selectedEditorBlock = (Instantiate(_spawnablePrefabs[i], pos, rot) as GameObject).GetInterface<IEditorBlock>();
+
+					// TODO(Julian): Make Abort work Properly!
+
+					StartGrabbing(_relativeCam);
+					break;
+				}
 			}
 
 			_lastMousePos = Input.mousePosition;
@@ -85,22 +109,36 @@ public class GameEditor : MonoBehaviour {
 			return;
 		}
 
-		if (!_isMoving && (Input.GetKey(KeyCode.LeftShift) ||
+		if ((Input.GetKey(KeyCode.LeftShift) ||
 			 Input.GetKey(KeyCode.RightShift)) && Input.GetKeyDown(KeyCode.D)) {
-			_selectedObject = Instantiate(_selectedObject, _selectedObject.transform.position, _selectedObject.transform.rotation) as GameObject;
+			_selectedEditorBlock = (Instantiate(_selectedEditorBlock.GO, _selectedEditorBlock.Position, _selectedEditorBlock.Rotation) as GameObject).GetInterface<IEditorBlock>();
+			_killObjectOnAbort = true;
 			StartGrabbing(foundCamera);
 			return;
 		}
 
-		if(!_isMoving && Input.GetKeyDown(KeyCode.Mouse0)) {
+
+		for (int i = 0; i < _spawnablePrefabs.Length; i++) {
+			if (Input.GetKeyDown(KeyCode.Alpha1 + i)) {
+				Vector3 p = foundCamera.ViewportToWorldPoint(foundCamera.ScreenToViewportPoint(Input.mousePosition));
+				p += foundCamera.transform.forward*4f;
+				_selectedEditorBlock = (Instantiate(_spawnablePrefabs[i], p, _spawnablePrefabs[i].transform.rotation) as GameObject).GetInterface<IEditorBlock>();
+				_killObjectOnAbort = true;
+				StartGrabbing(foundCamera);
+				return;
+			}
+		}
+
+		if(Input.GetKeyDown(KeyCode.Mouse0)) {
 			Vector3 testPoint = foundCamera.ScreenToViewportPoint(Input.mousePosition);
 			var testRay = foundCamera.ViewportPointToRay(testPoint);
 			RaycastHit hit;
 			if (Physics.Raycast(testRay, out hit)) {
 				var t = hit.transform;
 				do {
-					if(t.gameObject.GetComponent<EditorBlock>() != null) {
-						_selectedObject = t.gameObject;
+					IEditorBlock editorBlock = t.gameObject.GetInterface<IEditorBlock>();
+					if(editorBlock != null) {
+						_selectedEditorBlock = editorBlock;
 						break;
 					}
 					t = t.parent;
