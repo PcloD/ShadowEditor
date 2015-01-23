@@ -15,7 +15,7 @@ public class PlayerInputController : MonoBehaviour {
 	private float normalizedHorizontalSpeed = 0;
 
 	[System.Serializable]
-	struct PlayerInfo {
+	struct PlayerInfo2D {
 		public Transform spriteTransform;
 		public Animator animator;
 		public CharacterController2D controller;
@@ -25,20 +25,22 @@ public class PlayerInputController : MonoBehaviour {
 		public Vector3 velocity;
 	}
 
-	[SerializeField]
-	PlayerInfo _playerXY;
-	[SerializeField]
-	PlayerInfo _playerZY;
 
-	private PlayerInfo[] _allPlayers;
+	[SerializeField]
+	PlayerInfo2D _playerXY;
+	[SerializeField]
+	PlayerInfo2D _playerZY;
+	[SerializeField]
+	private Character3D _playerXYZ;
 
+	private PlayerInfo2D[] _all2DPlayers;
 	private int _characterIndexUnderControl;
 
 	void Awake()
 	{
-		_allPlayers = new PlayerInfo[2];
-		_allPlayers[0] = _playerXY;
-		_allPlayers[1] = _playerZY;
+		_all2DPlayers = new PlayerInfo2D[2];
+		_all2DPlayers[0] = _playerXY;
+		_all2DPlayers[1] = _playerZY;
 
 		_characterIndexUnderControl = 0;
 
@@ -79,18 +81,27 @@ public class PlayerInputController : MonoBehaviour {
 	// the Update loop contains a very simple example of moving the character around and controlling the animation
 	void Update () {
 		if (InputManager.ActiveDevice.Action2.WasPressed) {
-			_characterIndexUnderControl = (_characterIndexUnderControl + 1) % _allPlayers.Length;
+			_characterIndexUnderControl = (_characterIndexUnderControl + 1) % (_all2DPlayers.Length);
 		}
 
-		for (int i = 0; i < _allPlayers.Length; i++) {
+		if (_playerXYZ.DoesExist) {
+			if (InputManager.ActiveDevice.LeftBumper.WasPressed || InputManager.ActiveDevice.LeftTrigger.WasPressed) {
+				_playerXYZ.Rotate(-1);
+			}
+			if (InputManager.ActiveDevice.RightBumper.WasPressed || InputManager.ActiveDevice.RightTrigger.WasPressed) {
+				_playerXYZ.Rotate(1);
+			}
+		}
+
+		for (int i = 0; i < _all2DPlayers.Length; i++) {
 			bool isInputAllowed = (i == _characterIndexUnderControl);
-			SimulatePlayer(_allPlayers[i], isInputAllowed);
+			SimulatePlayer(_all2DPlayers[i], isInputAllowed);
 		}
 	}
 
 
 
-	void SimulatePlayer(PlayerInfo player, bool isInputAllowed)
+	void SimulatePlayer(PlayerInfo2D player, bool isInputAllowed)
 	{
 		CharacterController2D _controller = player.controller;
 		Transform spriteTransform = player.spriteTransform;
@@ -130,7 +141,7 @@ public class PlayerInputController : MonoBehaviour {
 
 
 		// we can only jump whilst grounded
-		if( isInputAllowed && _controller.isGrounded && (InputManager.ActiveDevice.DPadUp.IsPressed || InputManager.ActiveDevice.Action1.IsPressed) )
+		if( isInputAllowed && _controller.isGrounded && (InputManager.ActiveDevice.DPadUp.WasPressed || InputManager.ActiveDevice.Action1.WasPressed) )
 		{
 			player.velocity.x=0;
 			player.velocity.y = Mathf.Sqrt( 2f * jumpHeight * -gravity );

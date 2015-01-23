@@ -3,6 +3,9 @@ using System.Collections;
 
 public class EditorBlock : MonoBehaviour, IEditorBlock {
 
+	[SerializeField]
+	string _typeName;
+
 	public Vector3 Position {
 		set { transform.position = value; }
 		get { return transform.position; }
@@ -15,6 +18,10 @@ public class EditorBlock : MonoBehaviour, IEditorBlock {
 
 	public GameObject GO {
 		get { return gameObject; }
+	}
+
+	public string TypeName {
+		get { return _typeName; }
 	}
 
 }

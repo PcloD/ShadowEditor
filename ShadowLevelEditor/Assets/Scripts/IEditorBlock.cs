@@ -15,4 +15,8 @@ public interface IEditorBlock {
 	GameObject GO {
 		get;
 	}
+
+ 	string TypeName {
+		get;
+	}
 }

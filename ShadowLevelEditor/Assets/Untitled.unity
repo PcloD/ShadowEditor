@@ -265,9 +265,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dedb35e4fecff436da8b8e3b828d96d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _playerxy: {fileID: 95954861}
-  _playerzy: {fileID: 711562617}
+  _playerxy: {fileID: 156633071}
+  _playerzy: {fileID: 245481689}
   _visibilityThreshold: .100000001
+  _raycastEpsilon: .100000001
+  _pivotGridPrecision: .5
 --- !u!23 &144748499
 Renderer:
   m_ObjectHideFlags: 0
@@ -306,7 +308,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 12
 --- !u!1 &156633071
 GameObject:
   m_ObjectHideFlags: 0
@@ -372,6 +374,7 @@ MonoBehaviour:
   mapY: 1
   zEnabled: 0
   mapZ: -3
+  _typeName: 
 --- !u!114 &156633075
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -432,7 +435,7 @@ Transform:
   m_Children:
   - {fileID: 95954861}
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 14
 --- !u!1 &177172049
 GameObject:
   m_ObjectHideFlags: 0
@@ -477,7 +480,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 13
+  m_RootOrder: 15
 --- !u!114 &177172052
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -505,6 +508,7 @@ MonoBehaviour:
     animator: {fileID: 711562618}
     controller: {fileID: 245481693}
     velocity: {x: 0, y: 0, z: 0}
+  _playerXYZ: {fileID: 144748498}
 --- !u!114 &177172053
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -653,7 +657,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 406130, guid: 7cbc62c493e2243c7a203a7dcc7f71bd, type: 2}
       propertyPath: m_RootOrder
-      value: 14
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 2306130, guid: 7cbc62c493e2243c7a203a7dcc7f71bd, type: 2}
       propertyPath: m_Materials.Array.data[0]
@@ -730,6 +734,7 @@ MonoBehaviour:
   mapY: 1
   zEnabled: 0
   mapZ: -3
+  _typeName: 
 --- !u!114 &245481693
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -790,7 +795,7 @@ Transform:
   m_Children:
   - {fileID: 711562617}
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 13
 --- !u!1001 &259443956
 Prefab:
   m_ObjectHideFlags: 0
@@ -828,7 +833,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 402972, guid: 05479e8bce63d4b25a8625c1467377ab, type: 2}
       propertyPath: m_RootOrder
-      value: 12
+      value: 9
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 05479e8bce63d4b25a8625c1467377ab, type: 2}
@@ -872,7 +877,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 440206, guid: 4a486a47f53ec4a92b14d9aad619ce32, type: 2}
       propertyPath: m_RootOrder
-      value: 5
+      value: 14
       objectReference: {fileID: 0}
     - target: {fileID: 11440206, guid: 4a486a47f53ec4a92b14d9aad619ce32, type: 2}
       propertyPath: _plane
@@ -920,7 +925,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 413162, guid: 52df5be5edef14b2ebe938a421610c62, type: 2}
       propertyPath: m_RootOrder
-      value: 7
+      value: 5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 52df5be5edef14b2ebe938a421610c62, type: 2}
@@ -986,7 +991,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 14
+  m_RootOrder: 10
 --- !u!114 &434255398
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1053,7 +1058,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 470642, guid: f54da7ec09fe042c8a5652954257013e, type: 2}
       propertyPath: m_RootOrder
-      value: 13
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 11485034, guid: f54da7ec09fe042c8a5652954257013e, type: 2}
       propertyPath: _selectedObject
@@ -1119,6 +1124,18 @@ Prefab:
       propertyPath: _spawnablePrefabs.Array.data[2]
       value: 
       objectReference: {fileID: 142470, guid: 9f5aa277f4eea47f6b33bf05a47200e9, type: 2}
+    - target: {fileID: 11485032, guid: f54da7ec09fe042c8a5652954257013e, type: 2}
+      propertyPath: _3DPlayer
+      value: 
+      objectReference: {fileID: 144748498}
+    - target: {fileID: 11485032, guid: f54da7ec09fe042c8a5652954257013e, type: 2}
+      propertyPath: _playerXYZ
+      value: 
+      objectReference: {fileID: 144748498}
+    - target: {fileID: 11485034, guid: f54da7ec09fe042c8a5652954257013e, type: 2}
+      propertyPath: _spawnablePrefabs.Array.data[3]
+      value: 
+      objectReference: {fileID: 142470, guid: 9a868ebf0dde94c5891866ef3ddfa896, type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: f54da7ec09fe042c8a5652954257013e, type: 2}
   m_RootGameObject: {fileID: 177172049}
@@ -1292,7 +1309,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 7
 --- !u!1 &891932688
 GameObject:
   m_ObjectHideFlags: 0
@@ -1397,7 +1414,7 @@ Transform:
   m_Children:
   - {fileID: 178135263}
   m_Father: {fileID: 0}
-  m_RootOrder: 12
+  m_RootOrder: 9
 --- !u!114 &929638853
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1410,6 +1427,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4dd5bd4e6c88a408da3778ae327c7cfd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _typeName: EditorStairs
 --- !u!1 &931133117
 GameObject:
   m_ObjectHideFlags: 0
@@ -1543,7 +1561,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 5
 --- !u!1 &980266532
 GameObject:
   m_ObjectHideFlags: 0
@@ -1679,7 +1697,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 15
+  m_RootOrder: 11
 --- !u!114 &1069762590
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1898,8 +1916,8 @@ RectTransform:
   m_RootOrder: 1
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -393.649994, y: 180}
-  m_SizeDelta: {x: -787.299988, y: -699}
+  m_AnchoredPosition: {x: -422.200012, y: 180}
+  m_SizeDelta: {x: -844.400024, y: -699}
   m_Pivot: {x: .5, y: .5}
 --- !u!114 &1195244374
 MonoBehaviour:
@@ -1965,7 +1983,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 403480, guid: 134b9cf470ac547829c69c78e403677e, type: 2}
       propertyPath: m_RootOrder
-      value: 11
+      value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 134b9cf470ac547829c69c78e403677e, type: 2}
@@ -2009,7 +2027,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 463370, guid: 270f0c01741634da39514b2899cd069c, type: 2}
       propertyPath: m_RootOrder
-      value: 6
+      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: 11463374, guid: 270f0c01741634da39514b2899cd069c, type: 2}
       propertyPath: _plane
@@ -2313,10 +2331,10 @@ RectTransform:
   - {fileID: 1689175862}
   m_Father: {fileID: 1195244373}
   m_RootOrder: 1
-  m_AnchorMin: {x: .5, y: .5}
-  m_AnchorMax: {x: .5, y: .5}
-  m_AnchoredPosition: {x: 6, y: -22.3999996}
-  m_SizeDelta: {x: 172, y: 36}
+  m_AnchorMin: {x: 0, y: .5}
+  m_AnchorMax: {x: 1, y: .5}
+  m_AnchoredPosition: {x: -1.5, y: -19.8999996}
+  m_SizeDelta: {x: -21.8000031, y: 36}
   m_Pivot: {x: .5, y: .5}
 --- !u!114 &1827758150
 MonoBehaviour:
@@ -2395,6 +2413,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 1
+      - m_Target: {fileID: 177172053}
+        m_MethodName: HeightChanged
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine, Version=0.0.0.0,
+            Culture=neutral, PublicKeyToken=null
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.InputField+OnChangeEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
   m_SelectionColor: {r: .65882355, g: .807843149, b: 1, a: .752941191}
@@ -2512,7 +2542,7 @@ RectTransform:
   - {fileID: 2048838350}
   - {fileID: 1195244373}
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 6
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
@@ -2555,7 +2585,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 468688, guid: 4e3d2d9bb7e3d4263b6c38ee459013c9, type: 2}
       propertyPath: m_RootOrder
-      value: 15
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 2368688, guid: 4e3d2d9bb7e3d4263b6c38ee459013c9, type: 2}
       propertyPath: m_Materials.Array.data[0]
@@ -2599,10 +2629,10 @@ RectTransform:
   - {fileID: 1562860292}
   m_Father: {fileID: 1195244373}
   m_RootOrder: 0
-  m_AnchorMin: {x: .5, y: .5}
-  m_AnchorMax: {x: .5, y: .5}
-  m_AnchoredPosition: {x: 6, y: 18}
-  m_SizeDelta: {x: 172, y: 36}
+  m_AnchorMin: {x: 0, y: .5}
+  m_AnchorMax: {x: 1, y: .5}
+  m_AnchoredPosition: {x: -1.5, y: 20.5}
+  m_SizeDelta: {x: -21.8000031, y: 36}
   m_Pivot: {x: .5, y: .5}
 --- !u!114 &1978202547
 MonoBehaviour:
@@ -2681,6 +2711,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 1
+      - m_Target: {fileID: 177172053}
+        m_MethodName: WidthChanged
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine, Version=0.0.0.0,
+            Culture=neutral, PublicKeyToken=null
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.InputField+OnChangeEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
   m_SelectionColor: {r: .65882355, g: .807843149, b: 1, a: .752941191}
@@ -2741,6 +2783,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4dd5bd4e6c88a408da3778ae327c7cfd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _typeName: EditorCube
 --- !u!4 &1995252367
 Transform:
   m_ObjectHideFlags: 0
@@ -2753,7 +2796,7 @@ Transform:
   m_Children:
   - {fileID: 931133118}
   m_Father: {fileID: 0}
-  m_RootOrder: 11
+  m_RootOrder: 8
 --- !u!1 &2048838349
 GameObject:
   m_ObjectHideFlags: 0

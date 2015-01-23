@@ -15,6 +15,13 @@ public class CharacterEditorBlock : MonoBehaviour, IEditorBlock {
 	[SerializeField]
 	int mapZ = 2;
 
+	[SerializeField]
+	string _typeName;
+
+	public string TypeName {
+		get { return _typeName; }
+	}
+
 	public Vector3 Position {
 		set {
 			Vector3 newPos = new Vector3(
