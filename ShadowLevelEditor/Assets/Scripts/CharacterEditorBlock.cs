@@ -3,6 +3,9 @@ using System.Collections;
 
 public class CharacterEditorBlock : MonoBehaviour, IEditorBlock {
 	[SerializeField]
+	Transform _spriteTransform;
+
+	[SerializeField]
 	bool xEnabled = true;
 	[SerializeField]
 	int mapX = 0;
@@ -42,5 +45,22 @@ public class CharacterEditorBlock : MonoBehaviour, IEditorBlock {
 
 	public GameObject GO {
 		get { return gameObject; }
+	}
+
+
+	public Vector3[] SelectionVerts {
+		get {
+			Vector3[] verts = new Vector3[1];
+			verts[0] = _spriteTransform.position;
+			return verts;
+		}
+	}
+
+	public Vector3[] SelectionVertNormals {
+		get {
+			Vector3[] verts = new Vector3[1];
+			verts[0] = _spriteTransform.forward;
+			return verts;
+		}
 	}
 }

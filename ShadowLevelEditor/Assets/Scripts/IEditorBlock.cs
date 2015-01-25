@@ -19,4 +19,12 @@ public interface IEditorBlock {
  	string TypeName {
 		get;
 	}
+
+	Vector3[] SelectionVerts {
+		get;
+	}
+
+	Vector3[] SelectionVertNormals {
+		get;
+	}
 }

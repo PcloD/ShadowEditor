@@ -33,6 +33,13 @@ public class GameEditor : MonoBehaviour {
 
 	private Camera _relativeCam;
 
+	private MeshFilter _meshFilter;
+
+	void Awake () {
+		_meshFilter = gameObject.AddComponent<MeshFilter>();
+		_meshFilter.mesh = new Mesh();
+	}
+
 	private Vector3 SnapToRoundedOffest (Vector3 point, float precision) {
 		Vector3 result = point;
 		result.x = Mathf.Round(point.x / precision) * precision - precision/2f;
@@ -165,8 +172,60 @@ public class GameEditor : MonoBehaviour {
 
 	}
 
+	void DrawSelectedEditorBlock() {
+		Mesh mesh = _meshFilter.sharedMesh;
+		if (_selectedEditorBlock != null) {
+			Vector3[] verts = _selectedEditorBlock.SelectionVerts;
+			Vector3[] normals = _selectedEditorBlock.SelectionVertNormals;
+
+			Vector3[] drawVerts = new Vector3[verts.Length * 12];
+			Vector3[] drawNormals = new Vector3[normals.Length * 12];
+			int[] triangles = new int[verts.Length * 12];
+			float r = 0.2f;
+			// Unrotated and not moved tetrahedron verts
+			Vector3 pt0 = new Vector3(0,0,0);
+			Vector3 pt1 = new Vector3(r,0,0);
+			Vector3 pt2 = new Vector3(0.5f*r,0,Mathf.Sqrt(0.75f)*r);
+			Vector3 pt3 = new Vector3(0.5f*r,Mathf.Sqrt(0.75f)*r,Mathf.Sqrt(0.75f)/3*r);
+
+			mesh.Clear();
+
+			for (int i = 0; i < verts.Length; i++) {
+				Quaternion rot = Quaternion.FromToRotation(new Vector3(0,0,1), normals[i]);
+				// Quaternion rot = Quaternion.identity;
+				Vector3 p0 = (rot * pt0) + verts[i];
+				Vector3 p1 = (rot * pt1) + verts[i];
+				Vector3 p2 = (rot * pt2) + verts[i];
+				Vector3 p3 = (rot * pt3) + verts[i];
+				drawVerts[i * 12 + 0] = p0; drawVerts[i * 12 + 1] = p1; drawVerts[i * 12 + 2] = p2;
+				drawVerts[i * 12 + 3] = p0; drawVerts[i * 12 + 4] = p2; drawVerts[i * 12 + 5] = p3;
+				drawVerts[i * 12 + 6] = p2; drawVerts[i * 12 + 7] = p1; drawVerts[i * 12 + 8] = p3;
+				drawVerts[i * 12 + 9] = p0; drawVerts[i * 12 + 10] = p3; drawVerts[i * 12 + 11] = p1;
+
+				triangles[i * 12 + 0] = i*12+0; triangles[i * 12 + 1] = i*12+1; triangles[i * 12 + 2] = i*12+2;
+				triangles[i * 12 + 3] = i*12+3; triangles[i * 12 + 4] = i*12+4; triangles[i * 12 + 5] = i*12+5;
+				triangles[i * 12 + 6] = i*12+6; triangles[i * 12 + 7] = i*12+7; triangles[i * 12 + 8] = i*12+8;
+				triangles[i * 12 + 9] = i*12+9; triangles[i * 12 + 10] = i*12+10; triangles[i * 12 + 11] = i*12+11;
+
+
+
+				Debug.DrawLine(verts[i],verts[i]+normals[i], Color.blue);
+			}
+			mesh.vertices = drawVerts;
+			mesh.triangles = triangles;
+
+			mesh.RecalculateNormals();
+			mesh.RecalculateBounds();
+			mesh.Optimize();
+			// mesh.vertices = verts;
+		}
+
+	}
+
 	// Update is called once per frame
 	void Update () {
+
+		DrawSelectedEditorBlock();
 
 		if(Input.GetKeyDown(KeyCode.S)) {
 			Save();

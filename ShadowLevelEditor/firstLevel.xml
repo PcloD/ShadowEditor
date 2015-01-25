@@ -5,14 +5,86 @@
     <y>0</y>
   </worldDims>
   <characterXYPos>
-    <x>-0.4765917</x>
-    <y>1.68001068</y>
+    <x>0.24</x>
+    <y>1.68070436</y>
   </characterXYPos>
   <characterZYPos>
-    <x>-1.97041476</x>
-    <y>1.67999351</y>
+    <x>-0.9499999</x>
+    <y>1.68017352</y>
   </characterZYPos>
   <levelBlocks>
+    <SavableEditorBlock>
+      <name>EditorStairs(Clone)</name>
+      <type>EditorStairs</type>
+      <position>
+        <x>0</x>
+        <y>0</y>
+        <z>-3</z>
+      </position>
+      <rotation>
+        <x>2.20053171E-05</x>
+        <y>270</y>
+        <z>3.35359255E-05</z>
+      </rotation>
+      <scale>
+        <x>1</x>
+        <y>1</y>
+        <z>1</z>
+      </scale>
+      <editorPivot>
+        <x>0</x>
+        <y>0</y>
+        <z>0</z>
+      </editorPivot>
+    </SavableEditorBlock>
+    <SavableEditorBlock>
+      <name>EditorCube(Clone)(Clone)</name>
+      <type>EditorCube</type>
+      <position>
+        <x>-0.5</x>
+        <y>4</y>
+        <z>0</z>
+      </position>
+      <rotation>
+        <x>0</x>
+        <y>0</y>
+        <z>0</z>
+      </rotation>
+      <scale>
+        <x>1</x>
+        <y>1</y>
+        <z>1</z>
+      </scale>
+      <editorPivot>
+        <x>0</x>
+        <y>0</y>
+        <z>0</z>
+      </editorPivot>
+    </SavableEditorBlock>
+    <SavableEditorBlock>
+      <name>EditorCube(Clone)</name>
+      <type>EditorCube</type>
+      <position>
+        <x>2</x>
+        <y>0</y>
+        <z>-1.5</z>
+      </position>
+      <rotation>
+        <x>0</x>
+        <y>0</y>
+        <z>0</z>
+      </rotation>
+      <scale>
+        <x>1</x>
+        <y>1</y>
+        <z>1</z>
+      </scale>
+      <editorPivot>
+        <x>0</x>
+        <y>0</y>
+        <z>0</z>
+      </editorPivot>
+    </SavableEditorBlock>
     <SavableEditorBlock>
       <name>EditorStairs</name>
       <type>EditorStairs</type>
@@ -41,9 +113,9 @@
       <name>EditorCube</name>
       <type>EditorCube</type>
       <position>
-        <x>3</x>
+        <x>4.5</x>
         <y>0</y>
-        <z>0</z>
+        <z>0.5</z>
       </position>
       <rotation>
         <x>0</x>

@@ -127,12 +127,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f07063559a3c3444a9bbcbe2c834d78d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _spriteTransform: {fileID: 440204}
   xEnabled: 1
   mapX: 0
   yEnabled: 1
   mapY: 1
   zEnabled: 0
   mapZ: -3
+  _typeName: 
 --- !u!114 &11440206
 MonoBehaviour:
   m_ObjectHideFlags: 1
