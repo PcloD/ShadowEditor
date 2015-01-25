@@ -2953,6 +2953,10 @@ Prefab:
       propertyPath: _characterZYTransform
       value: 
       objectReference: {fileID: 245481696}
+    - target: {fileID: 11485034, guid: f54da7ec09fe042c8a5652954257013e, type: 2}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: f54da7ec09fe042c8a5652954257013e, type: 2}
   m_RootGameObject: {fileID: 177172049}
