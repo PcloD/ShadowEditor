@@ -14,6 +14,10 @@ public class GameEditor : MonoBehaviour {
 	Camera[] _cameras;
 	[SerializeField]
 	GameObject[] _spawnablePrefabs;
+	[SerializeField]
+	Transform _characterXYTransform;
+	[SerializeField]
+	Transform _characterZYTransform;
 
 	private float _width;
 	private float _height;
@@ -54,6 +58,19 @@ public class GameEditor : MonoBehaviour {
 			_lastMousePos = Input.mousePosition;
 
 			_sourcePosition = _selectedEditorBlock.Position;
+		}
+	}
+
+	private void DoRotate90(Camera camera, float direction, float precision) {
+		if (camera != null) {
+			_relativeCam = camera;
+
+			// Vector3 pivot = SnappingMath.SnapToRoundedOffset (_selectedEditorBlock.Position, precision);
+			Vector3 pivot = _selectedEditorBlock.Position;
+			// Vector3 originalPos = _selectedEditorBlock.Position;
+			_selectedEditorBlock.GO.transform.RotateAround(pivot, -camera.transform.forward, direction * 90); // TODO(JULIAN): make rotation gradual
+			// _selectedEditorBlock.Position = SnappingMath.SnapToRounded(originalPos, precision);
+			// _selectedEditorBlock.Rotation;
 		}
 	}
 
@@ -100,6 +117,8 @@ public class GameEditor : MonoBehaviour {
 			savableBlocks[i].editorPivot = Vector3.zero; // TODO(Julian): Save the editor pivot!
 		}
 		toSave.levelBlocks = savableBlocks;
+		toSave.characterXYPos = new Vector2(_characterXYTransform.position.x, _characterXYTransform.position.y);
+		toSave.characterZYPos = new Vector2(_characterZYTransform.position.x, _characterZYTransform.position.y);
 
 		XmlSerializer levelSerializer = new XmlSerializer(typeof(SavableLevel));
 		StreamWriter levelWriter = new StreamWriter(_levelName); // TODO(Julian): Varying filenames
@@ -119,7 +138,10 @@ public class GameEditor : MonoBehaviour {
 		for (int i = 0; i < blocks.Length; i++) {
 			Destroy(blocks[i].GO);
 		}
+
 		// TODO(Julian): Destroy the characters!
+		_characterXYTransform.position = new Vector3(toLoad.characterXYPos[0],toLoad.characterXYPos[1],0);
+		_characterZYTransform.position = new Vector3(toLoad.characterZYPos[0],toLoad.characterZYPos[1],0);
 
 		SavableEditorBlock[] loadableBlocks = toLoad.levelBlocks;
 		toLoad.worldDims = new Vector2(_width, _height);
@@ -208,6 +230,17 @@ public class GameEditor : MonoBehaviour {
 		}
 
 		if (foundCamera == null) {
+			return;
+		}
+
+
+		if ((Input.GetKey(KeyCode.LeftAlt) || Input.GetKey(KeyCode.RightAlt)) && Input.GetKeyDown(KeyCode.R)) {
+			DoRotate90(foundCamera, -1f, _precision);
+			return;
+		}
+
+		if (Input.GetKeyDown(KeyCode.R)) {
+			DoRotate90(foundCamera, 1f, _precision);
 			return;
 		}
 

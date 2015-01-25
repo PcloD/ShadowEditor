@@ -5,21 +5,21 @@
     <y>0</y>
   </worldDims>
   <characterXYPos>
-    <x>0</x>
-    <y>0</y>
+    <x>-0.4765917</x>
+    <y>1.68001068</y>
   </characterXYPos>
   <characterZYPos>
-    <x>0</x>
-    <y>0</y>
+    <x>-1.97041476</x>
+    <y>1.67999351</y>
   </characterZYPos>
   <levelBlocks>
     <SavableEditorBlock>
-      <name>EditorCube(Clone)</name>
-      <type>EditorCube</type>
+      <name>EditorStairs</name>
+      <type>EditorStairs</type>
       <position>
-        <x>2.5</x>
+        <x>0</x>
         <y>0</y>
-        <z>2.5</z>
+        <z>0</z>
       </position>
       <rotation>
         <x>0</x>
@@ -41,31 +41,7 @@
       <name>EditorCube</name>
       <type>EditorCube</type>
       <position>
-        <x>3.5</x>
-        <y>0</y>
-        <z>0</z>
-      </position>
-      <rotation>
-        <x>0</x>
-        <y>0</y>
-        <z>0</z>
-      </rotation>
-      <scale>
-        <x>1</x>
-        <y>1</y>
-        <z>1</z>
-      </scale>
-      <editorPivot>
-        <x>0</x>
-        <y>0</y>
-        <z>0</z>
-      </editorPivot>
-    </SavableEditorBlock>
-    <SavableEditorBlock>
-      <name>EditorStairs</name>
-      <type>EditorStairs</type>
-      <position>
-        <x>0</x>
+        <x>3</x>
         <y>0</y>
         <z>0</z>
       </position>

@@ -70,6 +70,7 @@ MonoBehaviour:
     animator: {fileID: 0}
     controller: {fileID: 0}
     velocity: {x: 0, y: 0, z: 0}
+  _playerXYZ: {fileID: 0}
 --- !u!114 &11485034
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -81,14 +82,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ed9dd22c1c5e47c48a9fe6d2dc82329, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _selectedObject: {fileID: 0}
   _precision: .5
   _cameras:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  _spawnablePrefabs: {fileID: 0}
+  _spawnablePrefabs:
+  - {fileID: 103480, guid: 134b9cf470ac547829c69c78e403677e, type: 2}
+  - {fileID: 102972, guid: 05479e8bce63d4b25a8625c1467377ab, type: 2}
+  - {fileID: 142470, guid: 9f5aa277f4eea47f6b33bf05a47200e9, type: 2}
+  _characterXYTransform: {fileID: 0}
+  _characterZYTransform: {fileID: 0}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

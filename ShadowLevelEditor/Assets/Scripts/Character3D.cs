@@ -47,6 +47,7 @@ public class Character3D : MonoBehaviour {
 		Collider hitCollider = null;
 
 		Vector3 pivot = SnappingMath.SnapToRoundedOffset (_transform.position, _pivotGridPrecision);
+		Debug.DrawLine(pivot - new Vector3(0,10,0), pivot + new Vector3(0,10,0), Color.red, 10f);
 
 		didHit[0] = Physics.Raycast(pivot + Vector3.up * _raycastEpsilon + Vector3.right * _playerxyCollider.size.x/2f, -Vector3.up, out hitInfo[0]);
 		didHit[1] = Physics.Raycast(pivot + Vector3.up * _raycastEpsilon + Vector3.left * _playerxyCollider.size.x/2f, -Vector3.up, out hitInfo[1]);
@@ -62,14 +63,21 @@ public class Character3D : MonoBehaviour {
 		if (hitCollider == null) {
 			Debug.LogError("HIT NOTHING!");
 		} else {
-
-			hitCollider.gameObject.transform.RotateAround(pivot, Vector3.up, direction * 90); // TODO(JULIAN): make rotation gradual
+			// TODO(Julian): Make this more robust
+			hitCollider.gameObject.transform.parent.RotateAround(pivot, Vector3.up, direction * 90); // TODO(JULIAN): make rotation gradual
 		}
 	}
 
 
 
 	void LateUpdate () {
+		for (int i = -10; i < 10; i++) {
+			for (int j = -10; j < 10; j++) {
+				Vector3 gridline = new Vector3(i*_pivotGridPrecision,0,j*_pivotGridPrecision);
+				Debug.DrawLine(gridline, gridline + new Vector3(0,10,0));
+			}
+		}
+
 			_transform.position = new Vector3(_playerxyTransform.position.x,
 											YPosition,
 											-_playerzyTransform.position.x);
